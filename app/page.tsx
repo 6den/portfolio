@@ -53,6 +53,25 @@ const PROJECTS = [
   }
 ];
 
+const SKILLS = [
+  {
+    category: "Languages",
+    items: ["Python", "Java", "JavaScript", "C", "Bash/Shell", "HTML/CSS", "R"],
+  },
+  {
+    category: "Frameworks",
+    items: ["React", "Node.js", "Tailwind CSS", "TensorFlow"],
+  },
+  {
+    category: "Tools",
+    items: ["Git", "Jupyter Notebook", "VS Code", "PyCharm", "IntelliJ", "GitHub", "Linux", "Google Colab", "Figma"],
+  },
+  {
+    category: "Libraries",
+    items: ["pandas", "NumPy", "Matplotlib", "scikit-learn", "Seaborn"],
+  },
+];
+
 export default function Portfolio() {
   const [activeHue, setActiveHue] = useState(240);
 
@@ -86,8 +105,8 @@ export default function Portfolio() {
 
         {/* HERO */}
         <section className="flex flex-col md:flex-row items-center md:items-start gap-12 pt-12">
-          <div className="w-32 h-32 md:w-48 md:h-48 rounded-2xl bg-white/5 border border-white/10 overflow-hidden flex-shrink-0 relative">
-            <img src="/aden.jpg" alt="Aden Barcroft" className="object-cover w-full h-full" />
+          <div className="w-40 h-52 md:w-52 md:h-72 rounded-2xl bg-white/5 border border-white/10 overflow-hidden flex-shrink-0 relative shadow-2xl">
+            <img src="/aden.jpg" alt="Aden Barcroft" className="object-cover object-top w-full h-full" />
           </div>
 
           <div className="flex-1 space-y-6 text-center md:text-left">
@@ -138,6 +157,9 @@ export default function Portfolio() {
           items={PROJECTS}
           onSelect={(hue: number) => setActiveHue(hue)}
         />
+
+        {/* SKILLS */}
+        <SkillsSection />
 
         {/* FOOTER */}
         <footer className="pt-12 border-t border-white/5 flex justify-between text-xs text-white/20 uppercase tracking-widest">
@@ -272,5 +294,40 @@ function ContentBlock({ title, items, onSelect }: { title: string; items: Conten
         </AnimatePresence>
       </div>
     </section>
+  );
+}
+
+function SkillsSection() {
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 0.8 }}
+    >
+      <h2 className="text-xl font-bold tracking-[0.2em] text-white/80 mb-10 uppercase pl-1">
+        What I Use:
+      </h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        {SKILLS.map((group) => (
+          <div key={group.category} className="space-y-4">
+            <h3 className="text-sm font-mono uppercase tracking-wider text-white/50">
+              {group.category}
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {group.items.map((skill) => (
+                <span
+                  key={skill}
+                  className="px-3 py-1.5 text-sm rounded-full border border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </motion.section>
   );
 }
