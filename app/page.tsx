@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'fra
 import { Github, Linkedin, Mail, FileText, ArrowUpRight } from 'lucide-react';
 
 // --- DATA ---
-const SECTIONS = ["Intro", "Experience", "Projects", "Skills"];
+const SECTIONS = ["Intro", "Experience", "Projects", "Involvement", "Skills"];
 
 const EXPERIENCE = [
   {
@@ -18,12 +18,21 @@ const EXPERIENCE = [
     link: "https://www.tryzyp.com/",
   },
   {
+    id: 'hoyalytics',
+    company: "Hoyalytics",
+    role: "Data Scientist",
+    date: "Aug'25 - Present",
+    desc: "Deliver end-to-end data science consulting projects for real companies, from exploratory analysis through predictive modeling, translating business questions into actionable insights.",
+    image: "/hoyalytics.png",
+  },
+  {
     id: 'mahidol',
     company: "Mahidol University",
     role: "Teaching Assistant",
     date: "Apr '24 - July '25",
     desc: "Developed Python auto-graders reducing workload by 70% and led weekly technical tutoring sessions for over 80 students.",
     image: "/mahidol.png",
+    imageClass: "max-w-[95%] max-h-[90%]",
   }
 ];
 
@@ -49,6 +58,24 @@ const PROJECTS = [
     desc: "A Chrome extension that automatically solves Wordle using constraint-based reasoning and information theory. Features real-time game state detection.",
     link: "https://github.com/6den/wsolve",
   }
+];
+
+const INVOLVEMENT = [
+  {
+    id: 'hackmed',
+    title: "MIT HackMed @ Siriraj",
+    tech: "Runner-Up",
+    date: "Nov '24",
+    desc: "Created an AI-assisted elderly meal planning and catering platform for chronic health conditions. Led a team to runner-up finish out of 1,000+ global applicants with a tech solution for aging-in-place elders.",
+    image: "/hackmed.jpg",
+  },
+  {
+    id: 'hackathon-club',
+    title: "MUIC Hackathon Club",
+    tech: "Founder",
+    date: "Jan '25",
+    desc: "Founded MUIC's first Computer Science club to promote hackathon culture and student mentorship. Organized campus-wide hackathons, workshops, and peer networking events for 150+ active members.",
+  },
 ];
 
 const SKILLS = [
@@ -92,7 +119,7 @@ export default function Portfolio() {
   const bgHue = useTransform(smoothProgress, [0, 1], [0, 360]);
   const bgFilter = useTransform(bgHue, (h) => `hue-rotate(${h}deg)`);
 
-  // Observer Logic to track active section (throttled with rAF)
+  // Observer Logic to track active section
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -185,8 +212,9 @@ export default function Portfolio() {
             className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-center gap-12"
             {...FADE_ANIM}
           >
-            <div className="w-40 h-52 md:w-52 md:h-72 rounded-2xl bg-white/5 border border-white/10 overflow-hidden flex-shrink-0 relative shadow-2xl group">
-              <img src="/aden.jpg" alt="Aden Barcroft" className="object-cover object-top w-full h-full transition-transform duration-700 group-hover:scale-105" />
+            <div className="w-40 h-52 md:w-52 md:h-72 rounded-3xl overflow-hidden flex-shrink-0 relative shadow-2xl group border border-white/10 border-t-white/20 border-l-white/20 bg-white/5 backdrop-blur-md">
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10" />
+              <img src="/aden.jpg" alt="Aden Barcroft" className="object-cover object-top w-full h-full transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100" />
             </div>
 
             <div className="space-y-6 text-center md:text-left">
@@ -216,7 +244,10 @@ export default function Portfolio() {
                 <SocialLink href="mailto:adenbarcroft@gmail.com" icon={<Mail size={18} />} />
                 <a
                   href="/resume.pdf"
-                  className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/10 bg-white/5 text-sm font-medium hover:bg-white hover:text-black transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full 
+                  bg-white/5 border border-white/10 border-t-white/20 border-l-white/20
+                  shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]
+                  text-sm font-medium hover:bg-white hover:text-black hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300"
                 >
                   <FileText size={16} /> Resume
                 </a>
@@ -248,7 +279,14 @@ export default function Portfolio() {
           </motion.div>
         </section>
 
-        {/* SECTION 4: SKILLS & FOOTER */}
+        {/* SECTION 4: INVOLVEMENT */}
+        <section className="h-screen w-full snap-start flex flex-col justify-center items-center px-6">
+          <motion.div className="max-w-5xl w-full" {...FADE_ANIM}>
+            <ContentBlock title="LEADERSHIP & AWARDS" items={INVOLVEMENT} />
+          </motion.div>
+        </section>
+
+        {/* SECTION 5: SKILLS & FOOTER */}
         <section className="h-screen w-full snap-start flex flex-col justify-center items-center px-6 relative">
           <motion.div className="max-w-5xl w-full" {...FADE_ANIM}>
             <SkillsSection />
@@ -273,7 +311,11 @@ function SocialLink({ href, icon }: { href: string; icon: React.ReactNode }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="p-3 rounded-full bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all hover:scale-105"
+      className="p-3 rounded-full 
+      bg-white/5 border border-white/10 border-t-white/20 border-l-white/20
+      shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]
+      text-white/70 hover:text-white hover:bg-white/10 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-110 
+      transition-all duration-300"
     >
       {icon}
     </a>
@@ -289,6 +331,7 @@ interface ContentItem {
   date?: string;
   desc: string;
   image?: string;
+  imageClass?: string;
   link?: string;
 }
 
@@ -308,8 +351,10 @@ function ContentBlock({ title, items }: { title: string; items: ContentItem[] })
             key={item.id}
             onClick={() => setActiveIndex(idx)}
             style={{ WebkitAppearance: 'none', background: 'transparent', border: 'none' }}
-            className={`cursor-pointer text-2xl md:text-4xl font-semibold tracking-tight transition-all duration-300 ${
-              idx === activeIndex ? "text-white scale-100 opacity-100" : "text-white/20 scale-95 opacity-50 hover:text-white/50"
+            className={`cursor-pointer text-2xl md:text-4xl font-semibold tracking-tight transition-all duration-500 ${
+              idx === activeIndex 
+                ? "text-white scale-100 opacity-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" 
+                : "text-white/20 scale-95 opacity-50 hover:text-white/50"
             }`}
           >
             {item.company || item.title}
@@ -327,14 +372,28 @@ function ContentBlock({ title, items }: { title: string; items: ContentItem[] })
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="absolute inset-0 grid grid-cols-1 md:grid-cols-2 gap-12"
           >
-            <div className="hidden md:flex h-[280px] w-full rounded-2xl border border-white/10 relative overflow-hidden bg-[#111] items-center justify-center group">
+            {/* SLEEK GLASS CARD FOR IMAGE */}
+            <div className="hidden md:flex h-[280px] w-full rounded-3xl relative overflow-hidden items-center justify-center group
+              bg-gradient-to-br from-white/10 to-white/0 
+              border border-white/10 border-t-white/20 border-l-white/20 
+              backdrop-blur-xl shadow-2xl
+            ">
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 mix-blend-overlay" />
+              
               {activeItem.image ? (
                 <>
-                  <img src={activeItem.image} alt="" className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-110" />
-                  <img src={activeItem.image} alt={activeItem.company || activeItem.title || ''} className="relative z-10 max-w-[90%] max-h-[85%] object-contain drop-shadow-2xl rounded-lg transition-transform duration-500 group-hover:scale-[1.02]" />
+                  {/* Blurred Background Reflection */}
+                  <img src={activeItem.image} alt="" className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-40 scale-125" />
+                  
+                  {/* Main Image */}
+                  <img 
+                    src={activeItem.image} 
+                    alt={activeItem.company || activeItem.title || ''} 
+                    className={`relative z-10 ${activeItem.imageClass || 'max-w-[85%] max-h-[80%]'} object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-lg transition-transform duration-700 group-hover:-translate-y-2 group-hover:scale-105`} 
+                  />
                 </>
               ) : (
-                <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-[60px] opacity-20 bg-white`} />
+                <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[60px] opacity-20 bg-white" />
               )}
             </div>
 
@@ -363,7 +422,10 @@ function ContentBlock({ title, items }: { title: string; items: ContentItem[] })
                   href={activeItem.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-2 inline-flex items-center gap-2 px-4 py-2 w-fit rounded-full border border-white/10 bg-white/5 text-sm font-medium text-white/70 hover:bg-white hover:text-black transition-all"
+                  className="mt-2 inline-flex items-center gap-2 px-5 py-2.5 w-fit rounded-full 
+                  bg-white/5 border border-white/10 border-t-white/20 border-l-white/20 
+                  shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]
+                  text-sm font-medium text-white/70 hover:bg-white hover:text-black hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300"
                 >
                   Visit <ArrowUpRight size={14} />
                 </a>
@@ -393,7 +455,11 @@ function SkillsSection() {
               {group.items.map((skill) => (
                 <span
                   key={skill}
-                  className="px-3 py-1.5 text-sm rounded-full border border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+                  className="px-4 py-2 text-sm rounded-full 
+                  bg-white/5 border border-white/5 border-t-white/10 border-l-white/10
+                  shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]
+                  text-white/70 hover:bg-white/10 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] 
+                  transition-all duration-300 cursor-default"
                 >
                   {skill}
                 </span>
