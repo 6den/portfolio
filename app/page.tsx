@@ -76,7 +76,7 @@ const FADE_ANIM = {
   viewport: { once: false, margin: "-10%" },
   transition: { 
     duration: 1.1, 
-    ease: [0.16, 1, 0.3, 1], 
+    ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
     delay: 0.1
   }
 };
@@ -89,6 +89,7 @@ export default function Portfolio() {
   const { scrollYProgress } = useScroll({ container: containerRef });
   const smoothProgress = useSpring(scrollYProgress, { mass: 0.1, stiffness: 50, damping: 20 });
   const bgHue = useTransform(smoothProgress, [0, 1], [0, 360]);
+  const bgFilter = useTransform(bgHue, (h) => `hue-rotate(${h}deg)`);
 
   // Observer Logic to track active section
   useEffect(() => {
@@ -123,7 +124,7 @@ export default function Portfolio() {
       <div className="fixed inset-0 z-0 pointer-events-none">
         <motion.div 
           className="absolute inset-0 w-full h-full"
-          style={{ filter: useTransform(bgHue, (h) => `hue-rotate(${h}deg)`) }}
+          style={{ filter: bgFilter }}
         >
           <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-violet-900/20 blur-[120px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-fuchsia-900/15 blur-[120px]" />
