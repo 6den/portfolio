@@ -74,7 +74,7 @@ const SKILLS = [
 const FADE_ANIM = {
   initial: { opacity: 0, y: 30 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-10%" },
+  viewport: { once: false, margin: "-10%" },
   transition: { 
     duration: 1.1, 
     ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
@@ -317,15 +317,15 @@ function ContentBlock({ title, items }: { title: string; items: ContentItem[] })
         ))}
       </div>
 
-      <div className="relative min-h-[300px]">
+      <div className="relative h-[300px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeItem.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }} 
-            className="grid grid-cols-1 md:grid-cols-2 gap-12"
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="absolute inset-0 grid grid-cols-1 md:grid-cols-2 gap-12"
           >
             <div className="hidden md:flex h-[280px] w-full rounded-2xl border border-white/10 relative overflow-hidden bg-[#111] items-center justify-center group">
               {activeItem.image ? (
