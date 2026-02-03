@@ -75,6 +75,7 @@ const INVOLVEMENT = [
     tech: "Founder",
     date: "Jan '25",
     desc: "Founded MUIC's first Computer Science club to promote hackathon culture and student mentorship. Organized campus-wide hackathons, workshops, and peer networking events for 150+ active members.",
+    image: "/muic-club.png",
   },
 ];
 
