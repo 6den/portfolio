@@ -182,17 +182,20 @@ export default function Portfolio() {
 
             <div className="space-y-6 text-center md:text-left">
               <div>
-                <h1
+                <motion.h1
                   className="text-5xl md:text-8xl font-bold tracking-tight mb-4"
+                  animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+                  transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
                   style={{
-                    background: 'linear-gradient(to bottom right, #e879f9, #c084fc, #ffffff)',
+                    background: 'linear-gradient(90deg, #e879f9, #c084fc, #93c5fd, #6ee7b7, #fde68a, #fca5a1, #e879f9)',
+                    backgroundSize: '300% 100%',
                     WebkitBackgroundClip: 'text',
                     backgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
                 >
                   Aden Barcroft
-                </h1>
+                </motion.h1>
                 <p className="text-xl text-white/50 font-light max-w-lg mx-auto md:mx-0">
                   Full Stack Developer @ Georgetown University
                 </p>
