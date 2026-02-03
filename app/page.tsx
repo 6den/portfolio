@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Github, Linkedin, Mail, FileText, ArrowUpRight } from 'lucide-react';
 
 // --- DATA ---
+const SECTIONS = ["Intro", "Experience", "Projects", "Skills"];
+
 const EXPERIENCE = [
   {
     id: 'zyp',
@@ -71,19 +73,48 @@ const SKILLS = [
 const FADE_ANIM = {
   initial: { opacity: 0, y: 30 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: false, margin: "-10%" }, // Triggers slightly sooner to catch the snap
+  viewport: { once: false, margin: "-10%" },
   transition: { 
     duration: 1.1, 
-    ease: [0.16, 1, 0.3, 1], // Cinematic easing
+    ease: [0.16, 1, 0.3, 1], 
     delay: 0.1
   }
 };
 
 export default function Portfolio() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [activeSection, setActiveSection] = useState(0);
+
+  // Scroll Progress Logic
   const { scrollYProgress } = useScroll({ container: containerRef });
   const smoothProgress = useSpring(scrollYProgress, { mass: 0.1, stiffness: 50, damping: 20 });
   const bgHue = useTransform(smoothProgress, [0, 1], [0, 360]);
+
+  // Observer Logic to track active section
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const scrollPosition = container.scrollTop;
+      const windowHeight = container.clientHeight;
+      // Calculate active index based on scroll position
+      const index = Math.round(scrollPosition / windowHeight);
+      setActiveSection(index);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (index: number) => {
+    const container = containerRef.current;
+    if (!container) return;
+    container.scrollTo({
+      top: index * container.clientHeight,
+      behavior: 'smooth'
+    });
+  };
 
   return (
     <div className="relative h-screen w-full bg-[#050505] text-slate-200 overflow-hidden selection:bg-fuchsia-500/30 selection:text-fuchsia-100">
@@ -105,17 +136,40 @@ export default function Portfolio() {
         <div className="absolute inset-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
       </div>
 
+      {/* --- NAVIGATION DOTS (RIGHT SIDE) --- */}
+      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
+        {SECTIONS.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => scrollToSection(idx)}
+            className="group relative flex items-center justify-end"
+            aria-label={`Scroll to section ${idx + 1}`}
+          >
+            {/* Hover Label */}
+            <span className={`
+              absolute right-8 px-2 py-1 rounded bg-white/10 backdrop-blur-md text-[10px] font-mono uppercase tracking-widest text-white/80 
+              transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0
+              ${activeSection === idx ? 'opacity-100 translate-x-0' : ''}
+            `}>
+              {SECTIONS[idx]}
+            </span>
+
+            {/* The Dot */}
+            <div className={`
+              w-3 h-3 rounded-full border border-white/20 transition-all duration-500
+              ${activeSection === idx ? 'bg-white scale-110 shadow-[0_0_15px_rgba(255,255,255,0.5)]' : 'bg-transparent hover:bg-white/20'}
+            `} />
+          </button>
+        ))}
+      </div>
+
       {/* --- SCROLL CONTAINER --- */}
-      {/* 1. h-screen: Restricts container to exact window height
-          2. snap-mandatory: FORCES the snap to complete. You cannot stop in the middle.
-      */}
       <main 
         ref={containerRef}
         className="relative z-10 h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth"
       >
         
-        {/* SNAP SECTION 1: HERO */}
-        {/* h-screen ensures strict full-height snapping */}
+        {/* SECTION 1: HERO */}
         <section className="h-screen w-full snap-start flex flex-col justify-center items-center px-6">
           <motion.div 
             className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-center gap-12"
@@ -167,21 +221,21 @@ export default function Portfolio() {
           </motion.div>
         </section>
 
-        {/* SNAP SECTION 2: EXPERIENCE */}
+        {/* SECTION 2: EXPERIENCE */}
         <section className="h-screen w-full snap-start flex flex-col justify-center items-center px-6">
           <motion.div className="max-w-5xl w-full" {...FADE_ANIM}>
             <ContentBlock title="EXPERIENCE" items={EXPERIENCE} />
           </motion.div>
         </section>
 
-        {/* SNAP SECTION 3: PROJECTS */}
+        {/* SECTION 3: PROJECTS */}
         <section className="h-screen w-full snap-start flex flex-col justify-center items-center px-6">
           <motion.div className="max-w-5xl w-full" {...FADE_ANIM}>
             <ContentBlock title="PROJECTS" items={PROJECTS} />
           </motion.div>
         </section>
 
-        {/* SNAP SECTION 4: SKILLS & FOOTER */}
+        {/* SECTION 4: SKILLS & FOOTER */}
         <section className="h-screen w-full snap-start flex flex-col justify-center items-center px-6 relative">
           <motion.div className="max-w-5xl w-full" {...FADE_ANIM}>
             <SkillsSection />
